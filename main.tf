@@ -105,24 +105,24 @@ resource "google_storage_bucket" "primary_buckets" {
   }
 
   # Lifecycle management with incremental rules
-  dynamic "lifecycle_rule" {
-    for_each = each.value.lifecycle_rules != null ? each.value.lifecycle_rules : local.default_lifecycle_rules
-    content {
-      action {
-        type          = lifecycle_rule.value.action.type
-        storage_class = try(lifecycle_rule.value.action.storage_class, null)
-      }
-      condition {
-        age                   = try(lifecycle_rule.value.condition.age, null)
-        created_before        = try(lifecycle_rule.value.condition.created_before, null)
-        with_state           = try(lifecycle_rule.value.condition.with_state, null)
-        matches_storage_class = try(lifecycle_rule.value.condition.matches_storage_class, null)
-        num_newer_versions   = try(lifecycle_rule.value.condition.num_newer_versions, null)
-        matches_prefix       = try(lifecycle_rule.value.condition.matches_prefix, null)
-        matches_suffix       = try(lifecycle_rule.value.condition.matches_suffix, null)
-      }
-    }
-  }
+  # dynamic "lifecycle_rule" {
+  #  for_each = each.value.lifecycle_rules != null ? each.value.lifecycle_rules : local.default_lifecycle_rules
+  #  content {
+  #    action {
+  #      type          = lifecycle_rule.value.action.type
+  #      storage_class = try(lifecycle_rule.value.action.storage_class, null)
+  #    }
+  #    condition {
+  #      age                   = try(lifecycle_rule.value.condition.age, null)
+  #      created_before        = try(lifecycle_rule.value.condition.created_before, null)
+  #      with_state           = try(lifecycle_rule.value.condition.with_state, null)
+  #      matches_storage_class = try(lifecycle_rule.value.condition.matches_storage_class, null)
+  #      num_newer_versions   = try(lifecycle_rule.value.condition.num_newer_versions, null)
+  #      matches_prefix       = try(lifecycle_rule.value.condition.matches_prefix, null)
+  #      matches_suffix       = try(lifecycle_rule.value.condition.matches_suffix, null)
+  #    }
+  #  }
+  #}
 
   # Encryption configuration
   dynamic "encryption" {
