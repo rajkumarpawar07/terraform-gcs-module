@@ -199,7 +199,7 @@ resource "google_storage_bucket" "secondary_bucket" {
 
   # Lifecycle rules for secondary bucket
   dynamic "lifecycle_rule" {
-    for_each = var.secondary_lifecycle_rules != null ? var.secondary_lifecycle_rules : local.default_lifecycle_rules
+    for_each = var.secondary_lifecycle_rules != null ? var.secondary_lifecycle_rules : tolist(local.default_lifecycle_rules)
     content {
       action {
         type          = lifecycle_rule.value.action.type
