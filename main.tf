@@ -37,7 +37,7 @@ locals {
   }
 
   # Default lifecycle rules for versioning
-  default_lifecycle_rules = tolist([
+  default_lifecycle_rules = toset([
     {
       action = {
         type = "Delete"
@@ -106,7 +106,8 @@ resource "google_storage_bucket" "primary_buckets" {
 
   # Lifecycle management with incremental rules
   dynamic "lifecycle_rule" {
-   for_each = each.value.lifecycle_rules != null ? each.value.lifecycle_rules : local.default_lifecycle_rules
+  #  for_each = each.value.lifecycle_rules != null ? each.value.lifecycle_rules : local.default_lifecycle_rules
+  for_each = local.default_lifecycle_rules
    content {
      action {
        type          = lifecycle_rule.value.action.type
@@ -198,24 +199,25 @@ resource "google_storage_bucket" "secondary_bucket" {
   }
 
   # Lifecycle rules for secondary bucket
-  # dynamic "lifecycle_rule" {
-  #   for_each = var.secondary_lifecycle_rules != null ? var.secondary_lifecycle_rules : tolist(local.default_lifecycle_rules)
-  #   content {
-  #     action {
-  #       type          = lifecycle_rule.value.action.type
-  #       storage_class = try(lifecycle_rule.value.action.storage_class, null)
-  #     }
-  #     condition {
-  #       age                   = try(lifecycle_rule.value.condition.age, null)
-  #       created_before        = try(lifecycle_rule.value.condition.created_before, null)
-  #       with_state           = try(lifecycle_rule.value.condition.with_state, null)
-  #       matches_storage_class = try(lifecycle_rule.value.condition.matches_storage_class, null)
-  #       num_newer_versions   = try(lifecycle_rule.value.condition.num_newer_versions, null)
-  #       matches_prefix       = try(lifecycle_rule.value.condition.matches_prefix, null)
-  #       matches_suffix       = try(lifecycle_rule.value.condition.matches_suffix, null)
-  #     }
-  #   }
-  # }
+  dynamic "lifecycle_rule" {
+    # for_each = var.secondary_lifecycle_rules != null ? var.secondary_lifecycle_rules : tolist(local.default_lifecycle_rules)
+    for_each = local.default_lifecycle_rules
+    content {
+      action {
+        type          = lifecycle_rule.value.action.type
+        storage_class = try(lifecycle_rule.value.action.storage_class, null)
+      }
+      condition {
+        age                   = try(lifecycle_rule.value.condition.age, null)
+        created_before        = try(lifecycle_rule.value.condition.created_before, null)
+        with_state           = try(lifecycle_rule.value.condition.with_state, null)
+        matches_storage_class = try(lifecycle_rule.value.condition.matches_storage_class, null)
+        num_newer_versions   = try(lifecycle_rule.value.condition.num_newer_versions, null)
+        matches_prefix       = try(lifecycle_rule.value.condition.matches_prefix, null)
+        matches_suffix       = try(lifecycle_rule.value.condition.matches_suffix, null)
+      }
+    }
+  }
 
   # Encryption for secondary bucket
   dynamic "encryption" {
