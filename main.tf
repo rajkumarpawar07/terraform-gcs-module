@@ -37,7 +37,7 @@ locals {
   }
 
   # Default lifecycle rules for versioning
-  default_lifecycle_rules = [
+  default_lifecycle_rules = tolist([
     {
       action = {
         type = "Delete"
@@ -75,7 +75,7 @@ locals {
         age = var.archive_age
       }
     }
-  ]
+  ])
 }
 
 # Primary bucket (mandatory) - using for_each for multiple buckets
