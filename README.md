@@ -14,7 +14,7 @@ A comprehensive, production-ready Terraform module for creating Google Cloud Sto
 - ✅ **Public Access Prevention** - Enforced by default for security
 - ✅ **Uniform Bucket Level Access** - Simplified permission management
 - ✅ **Multiple Bucket Support** - Create multiple buckets with for_each loops
-- ✅ **Optional Secondary Bucket** - Disaster recovery and backup scenarios
+- ✅ **Optional Secondary Bucket** - Disaster recovery and backup scenario
 
 ### Advanced Features
 - 🔒 **KMS Encryption** - Customer-managed encryption keys
