@@ -36,7 +36,7 @@ output "primary_buckets_details" {
       uniform_bucket_level_access = bucket.uniform_bucket_level_access
       labels                     = bucket.labels
       lifecycle_rules_count      = length(bucket.lifecycle_rule)
-      project_number             = bucket.project_number
+      
     }
   }
 }
@@ -124,13 +124,13 @@ output "bucket_count" {
 # VERSIONING OUTPUTS
 # ============================
 
-output "versioning_enabled_buckets" {
-  description = "List of buckets with versioning enabled"
-  value = concat(
-    [for bucket in google_storage_bucket.primary_buckets : bucket.name if bucket.versioning[0].enabled],
-    var.create_secondary_bucket && google_storage_bucket.secondary_bucket[0].versioning[0].enabled ? [google_storage_bucket.secondary_bucket[0].name] : []
-  )
-}
+# output "versioning_enabled_buckets" {
+#   description = "List of buckets with versioning enabled"
+#   value = concat(
+#     [for bucket in google_storage_bucket.primary_buckets : bucket.name if bucket.versioning[0].enabled],
+#     var.create_secondary_bucket && google_storage_bucket.secondary_bucket[0].versioning[0].enabled ? [google_storage_bucket.secondary_bucket[0].name] : []
+#   )
+# }
 
 output "versioning_status" {
   description = "Versioning status for all buckets"
