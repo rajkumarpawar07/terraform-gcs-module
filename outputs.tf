@@ -92,7 +92,6 @@ output "secondary_bucket_details" {
     uniform_bucket_level_access = google_storage_bucket.secondary_bucket[0].uniform_bucket_level_access
     labels                     = google_storage_bucket.secondary_bucket[0].labels
     lifecycle_rules_count      = length(google_storage_bucket.secondary_bucket[0].lifecycle_rule)
-    project_number             = google_storage_bucket.secondary_bucket[0].project_number
   } : null
 }
 
