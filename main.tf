@@ -23,8 +23,8 @@ locals {
   common_labels = merge(
     var.labels,
     {
-      module      = "gcs-versioning-module"
-      managed_by  = "terraform"
+      module      = "terraform-gcs-module"
+      managed_by  = "rajkumar"
       environment = var.environment
     }
   )
