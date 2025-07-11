@@ -233,18 +233,18 @@ output "iam_bindings" {
 # NOTIFICATION OUTPUTS
 # ============================
 
-output "bucket_notifications" {
-  description = "Bucket notifications configuration"
-  value = {
-    for key, notification in google_storage_notification.bucket_notifications : key => {
-      bucket         = notification.bucket
-      payload_format = notification.payload_format
-      topic          = notification.topic
-      event_types    = notification.event_types
-      notification_id = notification.notification_id
-    }
-  }
-}
+# output "bucket_notifications" {
+#   description = "Bucket notifications configuration"
+#   value = {
+#     for key, notification in google_storage_notification.bucket_notifications : key => {
+#       bucket         = notification.bucket
+#       payload_format = notification.payload_format
+#       topic          = notification.topic
+#       event_types    = notification.event_types
+#       notification_id = notification.notification_id
+#     }
+#   }
+# }
 
 # ============================
 # MODULE METADATA OUTPUTS

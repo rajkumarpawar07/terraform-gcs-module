@@ -37,15 +37,20 @@ locals {
   }
 
   # Default lifecycle rules for versioning
-  default_lifecycle_rules = toset([
+   default_lifecycle_rules  = [
     {
       action = {
-        type = "Delete"
+        type          = "Delete"
+        storage_class = null  # Include the optional field
       }
       condition = {
         age                   = var.default_lifecycle_age
-        num_newer_versions   = var.default_num_newer_versions
+        created_before        = null
         with_state           = "ARCHIVED"
+        matches_storage_class = null
+        num_newer_versions   = var.default_num_newer_versions
+        matches_prefix       = null
+        matches_suffix       = null
       }
     },
     {
@@ -54,7 +59,13 @@ locals {
         storage_class = "NEARLINE"
       }
       condition = {
-        age = var.nearline_age
+        age                   = var.nearline_age
+        created_before        = null
+        with_state           = null
+        matches_storage_class = null
+        num_newer_versions   = null
+        matches_prefix       = null
+        matches_suffix       = null
       }
     },
     {
@@ -63,7 +74,13 @@ locals {
         storage_class = "COLDLINE"
       }
       condition = {
-        age = var.coldline_age
+        age                   = var.coldline_age
+        created_before        = null
+        with_state           = null
+        matches_storage_class = null
+        num_newer_versions   = null
+        matches_prefix       = null
+        matches_suffix       = null
       }
     },
     {
@@ -72,10 +89,16 @@ locals {
         storage_class = "ARCHIVE"
       }
       condition = {
-        age = var.archive_age
+        age                   = var.archive_age
+        created_before        = null
+        with_state           = null
+        matches_storage_class = null
+        num_newer_versions   = null
+        matches_prefix       = null
+        matches_suffix       = null
       }
     }
-  ])
+  ]
 }
 
 # Primary bucket (mandatory) - using for_each for multiple buckets
@@ -106,8 +129,8 @@ resource "google_storage_bucket" "primary_buckets" {
 
   # Lifecycle management with incremental rules
   dynamic "lifecycle_rule" {
-  #  for_each = each.value.lifecycle_rules != null ? each.value.lifecycle_rules : local.default_lifecycle_rules
-  for_each = local.default_lifecycle_rules
+   for_each = each.value.lifecycle_rules != null ? each.value.lifecycle_rules : local.default_lifecycle_rules
+  # for_each = local.default_lifecycle_rules
    content {
      action {
        type          = lifecycle_rule.value.action.type
@@ -200,8 +223,8 @@ resource "google_storage_bucket" "secondary_bucket" {
 
   # Lifecycle rules for secondary bucket
   dynamic "lifecycle_rule" {
-    # for_each = var.secondary_lifecycle_rules != null ? var.secondary_lifecycle_rules : tolist(local.default_lifecycle_rules)
-    for_each = local.default_lifecycle_rules
+    for_each = var.secondary_lifecycle_rules != null ? var.secondary_lifecycle_rules : local.default_lifecycle_rules
+    # for_each = local.default_lifecycle_rules
     content {
       action {
         type          = lifecycle_rule.value.action.type
@@ -244,18 +267,18 @@ resource "google_storage_bucket_iam_binding" "bucket_iam_bindings" {
   ]
 }
 
-# Bucket notifications (optional)
-resource "google_storage_notification" "bucket_notifications" {
-  for_each = var.bucket_notifications
+# # Bucket notifications (optional)
+# resource "google_storage_notification" "bucket_notifications" {
+#   for_each = var.bucket_notifications
 
-  bucket         = each.value.bucket_name
-  payload_format = each.value.payload_format
-  topic          = each.value.topic
-  event_types    = each.value.event_types
-  object_name_prefix = try(each.value.object_name_prefix, null)
+#   bucket         = each.value.bucket_name
+#   payload_format = each.value.payload_format
+#   topic          = each.value.topic
+#   event_types    = each.value.event_types
+#   object_name_prefix = try(each.value.object_name_prefix, null)
 
-  depends_on = [
-    google_storage_bucket.primary_buckets,
-    google_storage_bucket.secondary_bucket
-  ]
-}
+#   depends_on = [
+#     google_storage_bucket.primary_buckets,
+#     google_storage_bucket.secondary_bucket
+#   ]
+# }

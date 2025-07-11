@@ -111,7 +111,7 @@ variable "labels" {
 variable "default_lifecycle_age" {
   description = "Default age in days for lifecycle policy to delete old versions"
   type        = number
-  default     = 90
+  default     = 1
   validation {
     condition     = var.default_lifecycle_age > 0
     error_message = "Default lifecycle age must be positive."
@@ -121,7 +121,7 @@ variable "default_lifecycle_age" {
 variable "default_num_newer_versions" {
   description = "Number of newer versions to keep"
   type        = number
-  default     = 3
+  default     = 2
   validation {
     condition     = var.default_num_newer_versions > 0
     error_message = "Number of newer versions must be positive."
@@ -131,7 +131,7 @@ variable "default_num_newer_versions" {
 variable "nearline_age" {
   description = "Age in days to transition to NEARLINE storage class"
   type        = number
-  default     = 30
+  default     = 2
   validation {
     condition     = var.nearline_age > 0
     error_message = "Nearline age must be positive."
@@ -141,7 +141,7 @@ variable "nearline_age" {
 variable "coldline_age" {
   description = "Age in days to transition to COLDLINE storage class"
   type        = number
-  default     = 90
+  default     = 3
   validation {
     condition     = var.coldline_age > 0
     error_message = "Coldline age must be positive."
@@ -151,7 +151,7 @@ variable "coldline_age" {
 variable "archive_age" {
   description = "Age in days to transition to ARCHIVE storage class"
   type        = number
-  default     = 365
+  default     = 4
   validation {
     condition     = var.archive_age > 0
     error_message = "Archive age must be positive."
@@ -264,21 +264,21 @@ variable "bucket_iam_bindings" {
   default = []
 }
 
-# ============================
-# NOTIFICATION VARIABLES
-# ============================
+# # ============================
+# # NOTIFICATION VARIABLES
+# # ============================
 
-variable "bucket_notifications" {
-  description = "Bucket notifications configuration"
-  type = map(object({
-    bucket_name         = string
-    payload_format      = string
-    topic              = string
-    event_types        = list(string)
-    object_name_prefix = optional(string)
-  }))
-  default = {}
-}
+# variable "bucket_notifications" {
+#   description = "Bucket notifications configuration"
+#   type = map(object({
+#     bucket_name         = string
+#     payload_format      = string
+#     topic              = string
+#     event_types        = list(string)
+#     object_name_prefix = optional(string)
+#   }))
+#   default = {}
+# }
 
 # ============================
 # FEATURE FLAGS

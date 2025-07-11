@@ -105,7 +105,7 @@ locals {
 # ============================
 
 module "gcs_basic_setup" {
-  source = "git::https://github.com/your-org/terraform-gcp-gcs-module.git?ref=v1.0.0"
+  source = "git::https://github.com/your-org/terraform-gcp-gcs-module.git"
   
   # Required variables
   project_id  = var.project_id
