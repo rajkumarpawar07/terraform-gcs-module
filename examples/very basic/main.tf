@@ -8,7 +8,7 @@ provider "google" {
 }
 
 module "gcs_buckets" {
-  source = "git::https://github.com/rajkumarpawar07/terraform-gcs-module.git"
+  source = "git::https://github.com/rajkumarpawar07/terraform-gcs-module.git?ref=v1.0.0"
 
   bucket_configs = var.bucket_configs
   environment    = var.environment
