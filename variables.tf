@@ -25,7 +25,7 @@ variable "bucket_configs" {
     versioning_enabled          = optional(bool, true)
     public_access_prevention    = optional(string, "enforced")
     uniform_bucket_level_access = optional(bool, true)
-    force_destroy               = optional(bool, false)
+    force_destroy               = optional(bool, true)
     labels                      = optional(map(string), {})
     lifecycle_rules            = optional(list(object({
       action = object({
@@ -209,7 +209,7 @@ variable "secondary_uniform_bucket_level_access" {
 variable "secondary_force_destroy" {
   description = "Force destroy secondary bucket even if not empty"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "secondary_versioning_enabled" {

@@ -37,11 +37,11 @@ locals {
   }
 
   # Default lifecycle rules for versioning
-   default_lifecycle_rules  = [
+   default_lifecycle_rules  = tolist([
     {
       action = {
         type          = "Delete"
-        storage_class = null  # Include the optional field
+        # storage_class = null  # Include the optional field
       }
       condition = {
         age                   = var.default_lifecycle_age
@@ -98,7 +98,7 @@ locals {
         matches_suffix       = null
       }
     }
-  ]
+  ])
 }
 
 # Primary bucket (mandatory) - using for_each for multiple buckets
@@ -129,8 +129,8 @@ resource "google_storage_bucket" "primary_buckets" {
 
   # Lifecycle management with incremental rules
   dynamic "lifecycle_rule" {
-  # for_each = each.value.lifecycle_rules != null ? each.value.lifecycle_rules : local.default_lifecycle_rules
-  for_each = local.default_lifecycle_rules
+  for_each = each.value.lifecycle_rules != null ? each.value.lifecycle_rules : local.default_lifecycle_rules
+  # for_each = local.default_lifecycle_rules
    content {
      action {
        type          = lifecycle_rule.value.action.type
@@ -223,8 +223,8 @@ resource "google_storage_bucket" "secondary_bucket" {
 
   # Lifecycle rules for secondary bucket
   dynamic "lifecycle_rule" {
-    # for_each = var.secondary_lifecycle_rules != null ? var.secondary_lifecycle_rules : local.default_lifecycle_rules
-    for_each = local.default_lifecycle_rules
+    for_each = var.secondary_lifecycle_rules != null ? var.secondary_lifecycle_rules : local.default_lifecycle_rules
+    # for_each = local.default_lifecycle_rules
     content {
       action {
         type          = lifecycle_rule.value.action.type
@@ -267,18 +267,4 @@ resource "google_storage_bucket_iam_binding" "bucket_iam_bindings" {
   ]
 }
 
-# # Bucket notifications (optional)
-# resource "google_storage_notification" "bucket_notifications" {
-#   for_each = var.bucket_notifications
 
-#   bucket         = each.value.bucket_name
-#   payload_format = each.value.payload_format
-#   topic          = each.value.topic
-#   event_types    = each.value.event_types
-#   object_name_prefix = try(each.value.object_name_prefix, null)
-
-#   depends_on = [
-#     google_storage_bucket.primary_buckets,
-#     google_storage_bucket.secondary_bucket
-#   ]
-# }
