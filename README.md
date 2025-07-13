@@ -63,12 +63,7 @@ terraform-gcs-module/
 
 # 📋 Versions & Changelog
 
-## Version History
-
 ### [v2.0.0] - Latest
-**Release Date**: Current Version  
-**Breaking Changes**: ⚠️ Major version with new features
-
 #### ✨ Added
 - **CORS Configuration** - Cross-origin resource sharing support
 - **Retention Policies** - Enhanced data retention management
@@ -79,10 +74,8 @@ terraform-gcs-module/
 
 #### 📝 Usage - examples/advanced-multi-bucket
 
-### [v1.1.0] - Feature Release
-**Release Date**: Previous Version  
-**Type**: Minor Update
 
+### [v1.1.0] - Feature Release
 #### ✨ Added
 - **Versioning Support** - Object versioning with configurable settings
 - **Retention Policy** - Automated object retention management
@@ -90,10 +83,8 @@ terraform-gcs-module/
 
 #### 📝 Usage - examples/basic-multi-bucket
 
-### [v1.0.0] - Initial Release
-**Release Date**: First Version  
-**Type**: Initial Release
 
+### [v1.0.0] - Initial Release
 #### ✨ Features
 - **Basic Bucket Creation** - Single and multi-bucket support
 - **Core Configuration** - Essential bucket settings
