@@ -1,57 +1,39 @@
 # ============================
-# OUTPUTS FROM MODULE USAGE
+# BUCKET OUTPUTS
 # ============================
 
-output "basic_setup_buckets" {
-  description = "Basic setup bucket details"
-  value       = module.gcs_basic_setup.primary_buckets_details
-}
-
-output "secure_setup_buckets" {
-  description = "Secure setup bucket details"
-  value       = module.gcs_secure_setup.primary_buckets_details
-}
-
-output "dev_setup_buckets" {
-  description = "Development setup bucket details"
-  value       = module.gcs_dev_setup.primary_buckets_details
-}
-
-output "website_setup_buckets" {
-  description = "Website setup bucket details"
-  value       = module.gcs_website_setup.primary_buckets_details
-}
-
-output "all_bucket_names" {
-  description = "All bucket names created across all module instances"
-  value = concat(
-    module.gcs_basic_setup.all_bucket_names,
-    module.gcs_secure_setup.all_bucket_names,
-    module.gcs_dev_setup.all_bucket_names,
-    module.gcs_website_setup.all_bucket_names
-  )
-}
-
-output "versioning_summary" {
-  description = "Summary of versioning status across all buckets"
+output "bucket_names" {
+  description = "Names of all buckets created"
   value = {
-    basic_setup   = module.gcs_basic_setup.versioning_status
-    secure_setup  = module.gcs_secure_setup.versioning_status
-    dev_setup     = module.gcs_dev_setup.versioning_status
-    website_setup = module.gcs_website_setup.versioning_status
+    web_assets    = "${var.project_id}-web-assets-${local.environment}"
+    user_uploads  = "${var.project_id}-user-uploads-${local.environment}"
+    data_lake     = "${var.project_id}-data-lake-${local.environment}"
+    backups       = var.create_secondary_bucket ? "${var.project_id}-backups-${local.environment}" : null
   }
 }
+
+output "bucket_urls" {
+  description = "URLs of all buckets created"
+  value = {
+    web_assets    = "gs://${var.project_id}-web-assets-${local.environment}"
+    user_uploads  = "gs://${var.project_id}-user-uploads-${local.environment}"
+    data_lake     = "gs://${var.project_id}-data-lake-${local.environment}"
+    backups       = var.create_secondary_bucket ? "gs://${var.project_id}-backups-${local.environment}" : null
+  }
+}
+
+
+# ============================
+# SERVICE ACCOUNTS
+# ============================
 
 output "service_accounts" {
-  description = "Service accounts created for bucket access"
+  description = "Service accounts with bucket access"
   value = {
-    web_service_account       = google_service_account.web_service_account.email
-    app_service_account       = google_service_account.app_service_account.email
-    analytics_service_account = google_service_account.analytics_service_account.email
+    web_service_account       = var.web_service_account
+    app_service_account       = var.app_service_account
+    analytics_service_account = var.analytics_service_account
   }
+  sensitive = true
 }
 
-output "kms_key_name" {
-  description = "KMS key name for bucket encryption"
-  value       = google_kms_crypto_key.bucket_key.id
-}
