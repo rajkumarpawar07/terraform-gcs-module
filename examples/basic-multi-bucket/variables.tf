@@ -26,6 +26,45 @@ variable "region" {
   }
 }
 
+variable "environment" {
+  description = "Environment name like dev/test/prod"
+  type        = string
+}
+
+# ============================
+# PRIMARY BUCKET CONFIGURATION
+# ============================
+variable "bucket_configs" {
+  description = "List of bucket configurations"
+  type        = list(any)
+}
+
+
+# ============================
+# SECONDARY BUCKET CONFIGURATION
+# ============================
+variable "create_secondary_bucket" {
+  description = "Create a secondary bucket"
+  type        = bool
+}
+
+variable "secondary_bucket_config" {
+  description = "Secondary bucket configuration"
+  type        = any
+}
+
+variable "secondary_lifecycle_rules" {
+  description = "Lifecycle rules for the secondary bucket"
+  type        = list(any)
+}
+
+# ============================
+# COMMON LABELS
+# ============================
+variable "common_labels" {
+  description = "Common labels for all resources"
+  type        = map(string)
+}
 
 # ============================
 # SERVICE ACCOUNT VARIABLES
