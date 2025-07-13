@@ -8,22 +8,22 @@
 # ============================
 
 output "primary_bucket_names" {
-  description = "Names of the primary buckets"
+  description = "==> Names of the primary buckets"
   value       = [for bucket in google_storage_bucket.primary_buckets : bucket.name]
 }
 
 output "primary_bucket_urls" {
-  description = "URLs of the primary buckets"
+  description = "==> URLs of the primary buckets"
   value       = [for bucket in google_storage_bucket.primary_buckets : bucket.url]
 }
 
 output "primary_bucket_self_links" {
-  description = "Self links of the primary buckets"
+  description = "==> Self links of the primary buckets"
   value       = [for bucket in google_storage_bucket.primary_buckets : bucket.self_link]
 }
 
 output "primary_buckets_details" {
-  description = "Detailed information about primary buckets"
+  description = "==> Detailed information about primary buckets"
   value = {
     for name, bucket in google_storage_bucket.primary_buckets : name => {
       name                        = bucket.name
@@ -36,12 +36,13 @@ output "primary_buckets_details" {
       uniform_bucket_level_access = bucket.uniform_bucket_level_access
       labels                     = bucket.labels
       lifecycle_rules_count      = length(bucket.lifecycle_rule)
+      
     }
   }
 }
 
 output "primary_buckets_by_index" {
-  description = "Primary buckets organized by their index for incremental access"
+  description = "==> Primary buckets organized by their index for incremental access"
   value = {
     for name, bucket in google_storage_bucket.primary_buckets : 
     local.bucket_configs[name].index => {
@@ -64,22 +65,22 @@ output "primary_buckets_by_index" {
 # ============================
 
 output "secondary_bucket_name" {
-  description = "Name of the secondary bucket (if created)"
+  description = "==> Name of the secondary bucket (if created)"
   value       = var.create_secondary_bucket ? google_storage_bucket.secondary_bucket[0].name : null
 }
 
 output "secondary_bucket_url" {
-  description = "URL of the secondary bucket (if created)"
+  description = "==> URL of the secondary bucket (if created)"
   value       = var.create_secondary_bucket ? google_storage_bucket.secondary_bucket[0].url : null
 }
 
 output "secondary_bucket_self_link" {
-  description = "Self link of the secondary bucket (if created)"
+  description = "==> Self link of the secondary bucket (if created)"
   value       = var.create_secondary_bucket ? google_storage_bucket.secondary_bucket[0].self_link : null
 }
 
 output "secondary_bucket_details" {
-  description = "Detailed information about secondary bucket"
+  description = "==> Detailed information about secondary bucket"
   value = var.create_secondary_bucket ? {
     name                        = google_storage_bucket.secondary_bucket[0].name
     location                    = google_storage_bucket.secondary_bucket[0].location
@@ -99,7 +100,7 @@ output "secondary_bucket_details" {
 # ============================
 
 output "all_bucket_names" {
-  description = "Names of all buckets created (primary + secondary)"
+  description = "==> Names of all buckets created (primary + secondary)"
   value = concat(
     [for bucket in google_storage_bucket.primary_buckets : bucket.name],
     var.create_secondary_bucket ? [google_storage_bucket.secondary_bucket[0].name] : []
@@ -107,7 +108,7 @@ output "all_bucket_names" {
 }
 
 output "all_bucket_urls" {
-  description = "URLs of all buckets created (primary + secondary)"
+  description = "==> URLs of all buckets created (primary + secondary)"
   value = concat(
     [for bucket in google_storage_bucket.primary_buckets : bucket.url],
     var.create_secondary_bucket ? [google_storage_bucket.secondary_bucket[0].url] : []
@@ -115,16 +116,13 @@ output "all_bucket_urls" {
 }
 
 output "bucket_count" {
-  description = "Total number of buckets created"
+  description = "==> Total number of buckets created"
   value = length(google_storage_bucket.primary_buckets) + (var.create_secondary_bucket ? 1 : 0)
 }
 
-# ============================
-# VERSIONING OUTPUTS
-# ============================
 
 output "versioning_status" {
-  description = "Versioning status for all buckets"
+  description = "==> Versioning status for all buckets"
   value = merge(
     {
       for name, bucket in google_storage_bucket.primary_buckets : name => {
@@ -146,7 +144,7 @@ output "versioning_status" {
 # ============================
 
 output "lifecycle_policies_summary" {
-  description = "Summary of lifecycle policies applied to buckets"
+  description = "==> Summary of lifecycle policies applied to buckets"
   value = merge(
     {
       for name, bucket in google_storage_bucket.primary_buckets : name => {
@@ -170,7 +168,7 @@ output "lifecycle_policies_summary" {
 # ============================
 
 output "public_access_prevention_status" {
-  description = "Public access prevention status for all buckets"
+  description = "==> Public access prevention status for all buckets"
   value = merge(
     {
       for name, bucket in google_storage_bucket.primary_buckets : name => {
@@ -188,7 +186,7 @@ output "public_access_prevention_status" {
 }
 
 output "uniform_bucket_level_access_status" {
-  description = "Uniform bucket level access status for all buckets"
+  description = "==> Uniform bucket level access status for all buckets"
   value = merge(
     {
       for name, bucket in google_storage_bucket.primary_buckets : name => {
@@ -206,6 +204,38 @@ output "uniform_bucket_level_access_status" {
 }
 
 # ============================
+# IAM OUTPUTS
+# ============================
+
+output "iam_bindings" {
+  description = "==> IAM bindings applied to buckets"
+  value = {
+    for key, binding in google_storage_bucket_iam_binding.bucket_iam_bindings : key => {
+      bucket  = binding.bucket
+      role    = binding.role
+      members = binding.members
+    }
+  }
+}
+
+# ============================
+# NOTIFICATION OUTPUTS
+# ============================
+
+# output "bucket_notifications" {
+#   description = "Bucket notifications configuration"
+#   value = {
+#     for key, notification in google_storage_notification.bucket_notifications : key => {
+#       bucket         = notification.bucket
+#       payload_format = notification.payload_format
+#       topic          = notification.topic
+#       event_types    = notification.event_types
+#       notification_id = notification.notification_id
+#     }
+#   }
+# }
+
+# ============================
 # MODULE METADATA OUTPUTS
 # ============================
 
@@ -213,7 +243,7 @@ output "module_metadata" {
   description = "Metadata about the module execution"
   value = {
     module_version              = "1.0.0"
-    terraform_version          = ">= 1.0"
+    terraform_version          = "~> 1.0"
     google_provider_version    = "~> 4.5"
     google_beta_provider_version = "~> 4.5"
     buckets_created            = length(google_storage_bucket.primary_buckets) + (var.create_secondary_bucket ? 1 : 0)

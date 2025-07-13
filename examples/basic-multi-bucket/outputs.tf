@@ -1,7 +1,3 @@
-# outputs.tf - Root Module Outputs for GCS Buckets Child Module
-# Author: DevOps Team
-# Version: 1.0.0
-# Description: Root module outputs that expose child module outputs for GCS buckets
 
 # ============================
 # PRIMARY BUCKETS OUTPUTS

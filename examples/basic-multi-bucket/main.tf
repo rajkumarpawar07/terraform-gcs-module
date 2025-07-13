@@ -17,7 +17,7 @@ module "gcs_buckets" {
   bucket_configs = var.bucket_configs
   
   # (Optional) second bucket for disaster recovery
-    create_secondary_bucket            = var.create_secondary_bucket
+  create_secondary_bucket            = var.create_secondary_bucket
   secondary_bucket_name             = var.secondary_bucket_name
   secondary_bucket_location         = var.secondary_bucket_location
   secondary_storage_class           = var.secondary_storage_class

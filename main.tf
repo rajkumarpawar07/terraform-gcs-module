@@ -148,6 +148,51 @@ resource "google_storage_bucket" "primary_buckets" {
    }
   }
 
+  # Encryption configuration
+  dynamic "encryption" {
+    for_each = each.value.kms_key_name != null ? [1] : []
+    content {
+      default_kms_key_name = each.value.kms_key_name
+    }
+  }
+
+  # Logging configuration
+  dynamic "logging" {
+    for_each = each.value.logging_config != null ? [each.value.logging_config] : []
+    content {
+      log_bucket        = logging.value.log_bucket
+      log_object_prefix = logging.value.log_object_prefix
+    }
+  }
+
+  # Website configuration
+  dynamic "website" {
+    for_each = each.value.website_config != null ? [each.value.website_config] : []
+    content {
+      main_page_suffix = website.value.main_page_suffix
+      not_found_page   = website.value.not_found_page
+    }
+  }
+
+  # CORS configuration
+  dynamic "cors" {
+    for_each = each.value.cors_config != null ? each.value.cors_config : []
+    content {
+      origin          = cors.value.origin
+      method          = cors.value.method
+      response_header = cors.value.response_header
+      max_age_seconds = cors.value.max_age_seconds
+    }
+  }
+
+  # Retention policy
+  dynamic "retention_policy" {
+    for_each = each.value.retention_policy != null ? [each.value.retention_policy] : []
+    content {
+      is_locked        = retention_policy.value.is_locked
+      retention_period = retention_policy.value.retention_period
+    }
+  }
 }
 
 # Optional secondary bucket with different configuration
@@ -197,8 +242,29 @@ resource "google_storage_bucket" "secondary_bucket" {
     }
   }
 
-
+  # Encryption for secondary bucket
+  dynamic "encryption" {
+    for_each = var.secondary_kms_key_name != null ? [1] : []
+    content {
+      default_kms_key_name = var.secondary_kms_key_name
+    }
+  }
 }
 
+# IAM bindings for buckets (best practice for access control)
+resource "google_storage_bucket_iam_binding" "bucket_iam_bindings" {
+  for_each = {
+    for binding in var.bucket_iam_bindings : "${binding.bucket_name}-${binding.role}" => binding
+  }
+
+  bucket = each.value.bucket_name
+  role   = each.value.role
+  members = each.value.members
+
+  depends_on = [
+    google_storage_bucket.primary_buckets,
+    google_storage_bucket.secondary_bucket
+  ]
+}
 
 
