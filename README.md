@@ -71,7 +71,6 @@ terraform-gcs-module/
 - **Website Hosting** - Static website hosting configuration
 - **KMS Encryption** - Customer-managed encryption keys support
 - **Enhanced Security** - Additional security configurations
-
 #### 📝 Usage - examples/advanced-multi-bucket
 
 
@@ -80,7 +79,6 @@ terraform-gcs-module/
 - **Versioning Support** - Object versioning with configurable settings
 - **Retention Policy** - Automated object retention management
 - **Lifecycle Rules** - Basic lifecycle management capabilities
-
 #### 📝 Usage - examples/basic-multi-bucket
 
 
@@ -90,7 +88,6 @@ terraform-gcs-module/
 - **Core Configuration** - Essential bucket settings
 - **Simple Setup** - Easy-to-use module structure
 - **Basic Security** - Default security configurations
-
 #### 📝 Usage - examples/basic-single-bucket
 
 
