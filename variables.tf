@@ -1,8 +1,3 @@
-# variables.tf - GCS Module Variables
-# Author: DevOps Team
-# Version: 1.0.0
-# Description: Variable definitions for GCS buckets module with versioning and lifecycle policies
-
 # ============================
 # REQUIRED VARIABLES
 # ============================
@@ -263,22 +258,6 @@ variable "bucket_iam_bindings" {
   }))
   default = []
 }
-
-# # ============================
-# # NOTIFICATION VARIABLES
-# # ============================
-
-# variable "bucket_notifications" {
-#   description = "Bucket notifications configuration"
-#   type = map(object({
-#     bucket_name         = string
-#     payload_format      = string
-#     topic              = string
-#     event_types        = list(string)
-#     object_name_prefix = optional(string)
-#   }))
-#   default = {}
-# }
 
 # ============================
 # FEATURE FLAGS

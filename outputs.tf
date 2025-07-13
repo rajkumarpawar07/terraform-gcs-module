@@ -1,8 +1,3 @@
-# outputs.tf - GCS Module Outputs
-# Author: DevOps Team
-# Version: 1.0.0
-# Description: Output values for GCS buckets module with versioning and lifecycle policies
-
 # ============================
 # PRIMARY BUCKETS OUTPUTS
 # ============================
