@@ -1,6 +1,6 @@
-# GCS Reusable Terraform Module with Versioning & Lifecycle Policies
+# Terraform Google Cloud Storage (GCS) Module
 
-A comprehensive, production-ready Terraform module for creating Google Cloud Storage (GCS) buckets with advanced features including versioning, lifecycle policies, public access prevention, and best practices implementation.
+A comprehensive, production-ready Terraform module for creating Google Cloud Storage (GCS) buckets with advanced features including versioning, lifecycle policies, public access prevention, and security best practices.
 
 ## 🚀 Features
 
@@ -14,7 +14,6 @@ A comprehensive, production-ready Terraform module for creating Google Cloud Sto
 
 ### Advanced Features
 - 🔒 **KMS Encryption** - Customer-managed encryption keys
-- 🔔 **Pub/Sub Notifications** - Event-driven architecture support
 - 🌐 **CORS Configuration** - Cross-origin resource sharing
 - 📊 **Access Logging** - Detailed audit trails
 - 🏷️ **Comprehensive Labeling** - Resource organization and cost tracking
@@ -61,6 +60,64 @@ terraform-gcs-module/
         └── terraform.tfvars   # Example variable values 
 
 ```
+
+# 📋 Versions & Changelog
+
+## Version History
+
+### [v2.0.0] - Latest
+**Release Date**: Current Version  
+**Breaking Changes**: ⚠️ Major version with new features
+
+#### ✨ Added
+- **CORS Configuration** - Cross-origin resource sharing support
+- **Retention Policies** - Enhanced data retention management
+- **Access Logging** - Comprehensive audit trail capabilities
+- **Website Hosting** - Static website hosting configuration
+- **KMS Encryption** - Customer-managed encryption keys support
+- **Enhanced Security** - Additional security configurations
+
+#### 📝 Usage - examples/advanced-multi-bucket
+
+### [v1.1.0] - Feature Release
+**Release Date**: Previous Version  
+**Type**: Minor Update
+
+#### ✨ Added
+- **Versioning Support** - Object versioning with configurable settings
+- **Retention Policy** - Automated object retention management
+- **Lifecycle Rules** - Basic lifecycle management capabilities
+
+#### 📝 Usage - examples/basic-multi-bucket
+
+### [v1.0.0] - Initial Release
+**Release Date**: First Version  
+**Type**: Initial Release
+
+#### ✨ Features
+- **Basic Bucket Creation** - Single and multi-bucket support
+- **Core Configuration** - Essential bucket settings
+- **Simple Setup** - Easy-to-use module structure
+- **Basic Security** - Default security configurations
+
+#### 📝 Usage - examples/basic-single-bucket
+
+
+## 🎯 Version Compatibility
+
+| Feature | v1.0.0 | v1.1.0 | v2.0.0 |
+|---------|--------|--------|--------|
+| Basic Bucket Creation | ✅ | ✅ | ✅ |
+| Multi-bucket Support | ✅ | ✅ | ✅ |
+| Versioning | ❌ | ✅ | ✅ |
+| Retention Policy | ❌ | ✅ | ✅ |
+| Lifecycle Rules | ❌ | ✅ | ✅ |
+| CORS Configuration | ❌ | ❌ | ✅ |
+| Access Logging | ❌ | ❌ | ✅ |
+| Website Hosting | ❌ | ❌ | ✅ |
+| KMS Encryption | ❌ | ❌ | ✅ |
+
+
 
 ## 🚀 Quick Start - 📝 Examples
 
