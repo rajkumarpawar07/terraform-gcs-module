@@ -35,10 +35,33 @@ variable "environment" {
 # PRIMARY BUCKET CONFIGURATION
 # ============================
 variable "bucket_configs" {
-  description = "List of bucket configurations"
-  type        = list(any)
+  description = "List of bucket configurations with their properties"
+  type = list(object({
+    name                         = string
+    location                     = string
+    storage_class               = optional(string, "STANDARD")
+    versioning_enabled          = optional(bool, true)
+    public_access_prevention    = optional(string, "enforced")
+    uniform_bucket_level_access = optional(bool, true)
+    force_destroy               = optional(bool, true)
+    labels                      = optional(map(string), {})
+    lifecycle_rules            = optional(list(object({
+      action = object({
+        type          = string
+        storage_class = optional(string)
+      })
+      condition = object({
+        age                   = optional(number)
+        created_before        = optional(string)
+        with_state           = optional(string)
+        matches_storage_class = optional(list(string))
+        num_newer_versions   = optional(number)
+        matches_prefix       = optional(list(string))
+        matches_suffix       = optional(list(string))
+      })
+    })), null)
+  }))
 }
-
 
 # ============================
 # SECONDARY BUCKET CONFIGURATION
@@ -46,16 +69,55 @@ variable "bucket_configs" {
 variable "create_secondary_bucket" {
   description = "Create a secondary bucket"
   type        = bool
+  default     = false
 }
 
-variable "secondary_bucket_config" {
-  description = "Secondary bucket configuration"
-  type        = any
+variable "secondary_bucket_name" {
+  description = "Name of the secondary bucket"
+  type        = string
+}
+
+variable "secondary_bucket_location" {
+  description = "Location of the secondary bucket"
+  type        = string
+}
+
+variable "secondary_storage_class" {
+  description = "Storage class for the secondary bucket"
+  type        = string
+  default     = "STANDARD"
+}
+
+variable "secondary_public_access_prevention" {
+  description = "Public access prevention for secondary bucket"
+  type        = string
+  default     = "enforced"
+}
+
+variable "secondary_uniform_bucket_level_access" {
+  description = "Uniform bucket level access for secondary bucket"
+  type        = bool
+}
+
+variable "secondary_force_destroy" {
+  description = "Force destroy for secondary bucket"
+  type        = bool
+}
+
+variable "secondary_versioning_enabled" {
+  description = "Enable versioning for secondary bucket"
+  type        = bool
 }
 
 variable "secondary_lifecycle_rules" {
   description = "Lifecycle rules for the secondary bucket"
   type        = list(any)
+}
+
+variable "secondary_bucket_labels" {
+  description = "Additional labels for secondary bucket"
+  type        = map(string)
+  default     = {}
 }
 
 # ============================
@@ -66,36 +128,3 @@ variable "common_labels" {
   type        = map(string)
 }
 
-# ============================
-# SERVICE ACCOUNT VARIABLES
-# ============================
-
-variable "web_service_account" {
-  description = "Email of the web service account for bucket access"
-  type        = string
-  default     = null
-  validation {
-    condition     = var.web_service_account == null || can(regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", var.web_service_account))
-    error_message = "Web service account must be a valid email address."
-  }
-}
-
-variable "app_service_account" {
-  description = "Email of the application service account for bucket access"
-  type        = string
-  default     = null
-  validation {
-    condition     = var.app_service_account == null || can(regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", var.app_service_account))
-    error_message = "Application service account must be a valid email address."
-  }
-}
-
-variable "analytics_service_account" {
-  description = "Email of the analytics service account for bucket access"
-  type        = string
-  default     = null
-  validation {
-    condition     = var.analytics_service_account == null || can(regex("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", var.analytics_service_account))
-    error_message = "Analytics service account must be a valid email address."
-  }
-}

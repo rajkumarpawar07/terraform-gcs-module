@@ -1,5 +1,5 @@
 project_id  = "grounded-tine-460817-c0"
-# region      = "us-central1"
+region      = "us-central1"
 environment = "production"
 
 # ============================
@@ -18,7 +18,7 @@ bucket_configs = [
         tier    = "frontend"
       }
       lifecycle_rules = [
-    {
+        {
       action = {
         type          = "Delete"
         storage_class = null  
@@ -61,7 +61,7 @@ bucket_configs = [
       labels = {
         purpose = "user-uploads"
         tier    = "application"
-      }
+      },
     }
   ]
 
@@ -103,3 +103,14 @@ secondary_lifecycle_rules = [
   }
 ]
 
+# ============================
+# COMMON LABELS
+# ============================
+
+common_labels  = {
+  managed_by    = "terraform"
+  project       = "my-application"
+  cost_center   = "engineering"
+  owner         = "devops-team"
+  created_by    = "rajkumar"
+}

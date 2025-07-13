@@ -17,10 +17,18 @@ module "gcs_buckets" {
   bucket_configs = var.bucket_configs
   
   # (Optional) second bucket for disaster recovery
-  create_secondary_bucket = var.create_secondary_bucket
-  secondary_bucket_config = var.secondary_bucket_config
-  lifecycle_rules = var.secondary_lifecycle_rules
+    create_secondary_bucket            = var.create_secondary_bucket
+  secondary_bucket_name             = var.secondary_bucket_name
+  secondary_bucket_location         = var.secondary_bucket_location
+  secondary_storage_class           = var.secondary_storage_class
+  secondary_public_access_prevention = var.secondary_public_access_prevention
+  secondary_uniform_bucket_level_access = var.secondary_uniform_bucket_level_access
+  secondary_force_destroy           = var.secondary_force_destroy
+  secondary_versioning_enabled      = var.secondary_versioning_enabled
+  secondary_lifecycle_rules         = var.secondary_lifecycle_rules
+  secondary_bucket_labels           = var.secondary_bucket_labels
+  
   
   # Common labels for all resources
-  common_labels = var.common_labels
+  labels = var.common_labels
 }
